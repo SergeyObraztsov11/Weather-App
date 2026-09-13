@@ -19,9 +19,28 @@ export async function getCityCoordinates(cityName) {
 
     try {
         const response = await fetch(url.href, { signal: controller.signal });
-        const data = await response.json();
-        const result = data.results?.[0];
 
+        if (response.status >= 400 && response.status < 500) {
+            throw new Error(
+                `Geocoding client error (${response.status}) for "${cityName}"`,
+            );
+        }
+        if (response.status >= 500) {
+            throw new Error(
+                `Geocoding server error (${response.status}) for "${cityName}"`,
+            );
+        }
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error(
+                `Invalid JSON in geocoding response for "${cityName}"`,
+            );
+        }
+
+        const result = data.results?.[0];
         if (!result) {
             throw new Error(`City ${cityName} not found`);
         }
@@ -35,6 +54,9 @@ export async function getCityCoordinates(cityName) {
     } catch (error) {
         if (error.name === "AbortError") {
             throw new Error(`Geocoding timeout for "${cityName}"`);
+        }
+        if (error.message.includes("fetch failed")) {
+            throw new Error(`Network error while geocoding "${cityName}"`);
         }
         throw error;
     } finally {

@@ -27,7 +27,7 @@ async function getWeatherForCity(cityName, days, noCache) {
         longitude: data.longitude,
         weather,
     };
-    await saveReport(report);
+    await saveReport(report, cityName);
     return report;
 }
 

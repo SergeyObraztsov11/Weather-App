@@ -21,8 +21,25 @@ export async function getWeatherByCoordinates(latitude, longitude, days) {
 
     try {
         const response = await fetch(url.href, { signal: controller.signal });
-        const data = await response.json();
+
+        if (response.status >= 400 && response.status < 500) {
+            throw new Error(`Forecast client error (${response.status})`);
+        }
+        if (response.status >= 500) {
+            throw new Error(`Forecast server error (${response.status})`);
+        }
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("Invalid JSON in forecast response");
+        }
+
         const daily = data.daily;
+        if (!daily?.time) {
+            throw new Error("Forecast data is missing");
+        }
 
         return daily.time.map((time, index) => ({
             date: time,
@@ -33,6 +50,9 @@ export async function getWeatherByCoordinates(latitude, longitude, days) {
     } catch (error) {
         if (error.name === "AbortError") {
             throw new Error("Weather forecast timeout");
+        }
+        if (error.message.includes("fetch failed")) {
+            throw new Error("Network error while fetching forecast");
         }
         throw error;
     } finally {
