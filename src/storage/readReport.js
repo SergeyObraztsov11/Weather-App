@@ -12,6 +12,7 @@ export async function readReport(cityName) {
         }
         throw new Error(
             `Failed to read report for ${cityName}: ${error.message}`,
+            { cause: error },
         );
     }
 }

@@ -34,9 +34,10 @@ export async function getCityCoordinates(cityName) {
         let data;
         try {
             data = await response.json();
-        } catch {
+        } catch (error) {
             throw new Error(
                 `Invalid JSON in geocoding response for "${cityName}"`,
+                { cause: error },
             );
         }
 
@@ -53,10 +54,14 @@ export async function getCityCoordinates(cityName) {
         };
     } catch (error) {
         if (error.name === "AbortError") {
-            throw new Error(`Geocoding timeout for "${cityName}"`);
+            throw new Error(`Geocoding timeout for "${cityName}"`, {
+                cause: error,
+            });
         }
         if (error.message.includes("fetch failed")) {
-            throw new Error(`Network error while geocoding "${cityName}"`);
+            throw new Error(`Network error while geocoding "${cityName}"`, {
+                cause: error,
+            });
         }
         throw error;
     } finally {

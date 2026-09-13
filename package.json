@@ -4,10 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env src/index.js"
+    "test": "node --env-file=.env src/index.js --city \"Москва, Санкт-Петербург, Минск\" --days 7",
+    "lint:check": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format:check": "prettier --check src",
+    "format:fix": "prettier --write src",
+    "check": "npm run lint:check && npm run format:check",
+    "fix": "npm run lint:fix && npm run format:fix"
   },
   "keywords": [],
-  "author": "",
+  "author": "sergey-obraztsov",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.10.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.6"
+  }
 }

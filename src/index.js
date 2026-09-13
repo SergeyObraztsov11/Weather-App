@@ -18,4 +18,3 @@ try {
     console.error(`\x1b[31m${error.message}\x1b[0m`);
     process.exitCode = 1;
 }
-

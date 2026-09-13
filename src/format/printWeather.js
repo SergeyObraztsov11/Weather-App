@@ -8,14 +8,8 @@ export function printWeather(citiesWeather) {
             continue;
         }
 
-        const {
-            cityName,
-            country,
-            latitude,
-            longitude,
-            weather,
-            fromCache,
-        } = cityWeather.data;
+        const { cityName, country, latitude, longitude, weather, fromCache } =
+            cityWeather.data;
 
         const source = fromCache ? "cache" : "network";
 

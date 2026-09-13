@@ -32,8 +32,10 @@ export async function getWeatherByCoordinates(latitude, longitude, days) {
         let data;
         try {
             data = await response.json();
-        } catch {
-            throw new Error("Invalid JSON in forecast response");
+        } catch (error) {
+            throw new Error("Invalid JSON in forecast response", {
+                cause: error,
+            });
         }
 
         const daily = data.daily;
@@ -49,10 +51,12 @@ export async function getWeatherByCoordinates(latitude, longitude, days) {
         }));
     } catch (error) {
         if (error.name === "AbortError") {
-            throw new Error("Weather forecast timeout");
+            throw new Error("Weather forecast timeout", { cause: error });
         }
         if (error.message.includes("fetch failed")) {
-            throw new Error("Network error while fetching forecast");
+            throw new Error("Network error while fetching forecast", {
+                cause: error,
+            });
         }
         throw error;
     } finally {
