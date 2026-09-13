@@ -1,0 +1,219 @@
+{
+  "info": {
+    "name": "Weather Digest",
+    "description": "Postman collection for Case 1: geocoding + forecast APIs used by the weather digest CLI.\n\nVariables: geocodingBaseUrl, forecastBaseUrl, city, lat, lon, days.\n\nExamples include success, city not found, and error responses with HTTP status codes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Geocoding",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{geocodingBaseUrl}}/v1/search?name={{city}}&count=1&language=ru&format=json",
+          "host": ["{{geocodingBaseUrl}}"],
+          "path": ["v1", "search"],
+          "query": [
+            { "key": "name", "value": "{{city}}" },
+            { "key": "count", "value": "1" },
+            { "key": "language", "value": "ru" },
+            { "key": "format", "value": "json" }
+          ]
+        },
+        "description": "Resolve city name to coordinates."
+      },
+      "response": [
+        {
+          "name": "Success - city found (200)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{geocodingBaseUrl}}/v1/search?name=Москва&count=1&language=ru&format=json",
+              "host": ["{{geocodingBaseUrl}}"],
+              "path": ["v1", "search"],
+              "query": [
+                { "key": "name", "value": "Москва" },
+                { "key": "count", "value": "1" },
+                { "key": "language", "value": "ru" },
+                { "key": "format", "value": "json" }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+          ],
+          "cookie": [],
+          "body": "{\n  \"results\": [\n    {\n      \"id\": 524901,\n      \"name\": \"Москва\",\n      \"latitude\": 55.75204,\n      \"longitude\": 37.61781,\n      \"elevation\": 155,\n      \"feature_code\": \"PPLC\",\n      \"country_code\": \"RU\",\n      \"timezone\": \"Europe/Moscow\",\n      \"population\": 10381222,\n      \"country\": \"Россия\",\n      \"admin1\": \"Москва\"\n    }\n  ],\n  \"generationtime_ms\": 2.89\n}"
+        },
+        {
+          "name": "City not found (200, empty results)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{geocodingBaseUrl}}/v1/search?name=1231231231&count=1&language=ru&format=json",
+              "host": ["{{geocodingBaseUrl}}"],
+              "path": ["v1", "search"],
+              "query": [
+                { "key": "name", "value": "1231231231" },
+                { "key": "count", "value": "1" },
+                { "key": "language", "value": "ru" },
+                { "key": "format", "value": "json" }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+          ],
+          "cookie": [],
+          "body": "{\n  \"generationtime_ms\": 0.21\n}"
+        },
+        {
+          "name": "Error - invalid count (400)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{geocodingBaseUrl}}/v1/search?name=Москва&count=9999&language=ru&format=json",
+              "host": ["{{geocodingBaseUrl}}"],
+              "path": ["v1", "search"],
+              "query": [
+                { "key": "name", "value": "Москва" },
+                { "key": "count", "value": "9999" },
+                { "key": "language", "value": "ru" },
+                { "key": "format", "value": "json" }
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+          ],
+          "cookie": [],
+          "body": "{\n  \"reason\": \"Parameter count must be between 1 and 100.\",\n  \"error\": true\n}"
+        }
+      ]
+    },
+    {
+      "name": "Forecast",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{forecastBaseUrl}}/v1/forecast?latitude={{lat}}&longitude={{lon}}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days={{days}}&timezone=auto",
+          "host": ["{{forecastBaseUrl}}"],
+          "path": ["v1", "forecast"],
+          "query": [
+            { "key": "latitude", "value": "{{lat}}" },
+            { "key": "longitude", "value": "{{lon}}" },
+            {
+              "key": "daily",
+              "value": "temperature_2m_max,temperature_2m_min,precipitation_sum"
+            },
+            { "key": "forecast_days", "value": "{{days}}" },
+            { "key": "timezone", "value": "auto" }
+          ]
+        },
+        "description": "Get daily weather forecast by coordinates."
+      },
+      "response": [
+        {
+          "name": "Success - forecast (200)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{forecastBaseUrl}}/v1/forecast?latitude=55.75204&longitude=37.61781&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=3&timezone=auto",
+              "host": ["{{forecastBaseUrl}}"],
+              "path": ["v1", "forecast"],
+              "query": [
+                { "key": "latitude", "value": "55.75204" },
+                { "key": "longitude", "value": "37.61781" },
+                {
+                  "key": "daily",
+                  "value": "temperature_2m_max,temperature_2m_min,precipitation_sum"
+                },
+                { "key": "forecast_days", "value": "3" },
+                { "key": "timezone", "value": "auto" }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+          ],
+          "cookie": [],
+          "body": "{\n  \"latitude\": 55.75,\n  \"longitude\": 37.625,\n  \"generationtime_ms\": 0.15,\n  \"utc_offset_seconds\": 10800,\n  \"timezone\": \"Europe/Moscow\",\n  \"timezone_abbreviation\": \"GMT+3\",\n  \"elevation\": 155.0,\n  \"daily_units\": {\n    \"time\": \"iso8601\",\n    \"temperature_2m_max\": \"°C\",\n    \"temperature_2m_min\": \"°C\",\n    \"precipitation_sum\": \"mm\"\n  },\n  \"daily\": {\n    \"time\": [\"2026-09-13\", \"2026-09-14\", \"2026-09-15\"],\n    \"temperature_2m_max\": [16.2, 18.4, 18.6],\n    \"temperature_2m_min\": [7.7, 9.2, 11.7],\n    \"precipitation_sum\": [0.0, 0.0, 0.1]\n  }\n}"
+        },
+        {
+          "name": "Error - invalid latitude (400)",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{forecastBaseUrl}}/v1/forecast?latitude=999&longitude=37.61781&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=3&timezone=auto",
+              "host": ["{{forecastBaseUrl}}"],
+              "path": ["v1", "forecast"],
+              "query": [
+                { "key": "latitude", "value": "999" },
+                { "key": "longitude", "value": "37.61781" },
+                {
+                  "key": "daily",
+                  "value": "temperature_2m_max,temperature_2m_min,precipitation_sum"
+                },
+                { "key": "forecast_days", "value": "3" },
+                { "key": "timezone", "value": "auto" }
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": true,\n  \"reason\": \"Latitude must be in range of -90 to 90°. Given: 999.0.\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "geocodingBaseUrl",
+      "value": "https://geocoding-api.open-meteo.com"
+    },
+    {
+      "key": "forecastBaseUrl",
+      "value": "https://api.open-meteo.com"
+    },
+    {
+      "key": "city",
+      "value": "Москва"
+    },
+    {
+      "key": "lat",
+      "value": "55.75204"
+    },
+    {
+      "key": "lon",
+      "value": "37.61781"
+    },
+    {
+      "key": "days",
+      "value": "3"
+    }
+  ]
+}

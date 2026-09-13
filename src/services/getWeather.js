@@ -11,6 +11,7 @@ async function getWeatherForCity(cityName, days, noCache) {
             return {
                 ...cached,
                 weather: cached.weather.slice(0, days),
+                fromCache: true,
             };
         }
     }
@@ -28,7 +29,10 @@ async function getWeatherForCity(cityName, days, noCache) {
         weather,
     };
     await saveReport(report, cityName);
-    return report;
+    return {
+        ...report,
+        fromCache: false,
+    };
 }
 
 export async function getWeather(cityNames = [], days = 3, noCache = false) {

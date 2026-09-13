@@ -10,7 +10,10 @@ try {
         options.noCache,
     );
     printWeather(citiesWeather);
+
+    const hasErrors = citiesWeather.some((item) => item.status === "error");
+    process.exit(hasErrors ? 1 : 0);
 } catch (error) {
-    console.error(error.message);
+    console.error(`\x1b[31m${error.message}\x1b[0m`);
     process.exit(1);
 }
