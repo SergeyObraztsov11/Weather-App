@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node --env-file=.env src/index.js",
     "test": "node --env-file=.env src/index.js --city \"Москва, Санкт-Петербург, Минск\" --days 7",
     "lint:check": "eslint src",
     "lint:fix": "eslint src --fix",
     "format:check": "prettier --check src",
     "format:fix": "prettier --write src",
     "check": "npm run lint:check && npm run format:check",
-    "fix": "npm run lint:fix && npm run format:fix"
+    "fix": "npm run lint:fix && npm run format:fix",
+    "docker:build": "docker build -t weather-app .",
+    "docker:run": "docker run --rm --env-file .env -e REQUEST_TIMEOUT_MS=15000 weather-app",
+    "docker:test": "docker run --rm --env-file .env -e REQUEST_TIMEOUT_MS=15000 weather-app --city \"Москва\" --days 3"
   },
   "keywords": [],
   "author": "sergey-obraztsov",

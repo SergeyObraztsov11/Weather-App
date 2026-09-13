@@ -8,12 +8,13 @@
 
 - Node.js **20+**
 - npm
+- Docker Desktop
 
 ## 3. Установка
 
 ```bash
-git clone <ссылка-на-репозиторий>
-cd "Weather App"
+git clone https://github.com/SergeyObraztsov11/Weather-App.git
+cd Weather-App
 npm install
 cp .env.example .env
 ```
@@ -31,13 +32,19 @@ cp .env.example .env
 
 ## 5. Команды запуска и параметры
 
-Базовый запуск:
+Основной способ — запуск **локально** (без Docker).
+
+```bash
+npm start -- --city "Нижний Новгород" --days 3
+```
+
+или:
 
 ```bash
 node --env-file=.env src/index.js --city "Нижний Новгород" --days 3
 ```
 
-Все параметры:
+### Параметры
 
 | Параметр | Обязательный | Описание |
 |----------|--------------|----------|
@@ -45,24 +52,26 @@ node --env-file=.env src/index.js --city "Нижний Новгород" --days 
 | `--days` | нет | Длина прогноза, целое **1–7**, по умолчанию **3** |
 | `--no-cache` | нет | Игнорировать кэш и снова запросить API |
 
-Примеры:
+### Примеры
 
 ```bash
-node --env-file=.env src/index.js --city "Москва"
-node --env-file=.env src/index.js --city "Москва, Минск" --days 5
-node --env-file=.env src/index.js --city "Москва" --days 3 --no-cache
+npm start -- --city "Москва"
+npm start -- --city "Москва, Минск" --days 5
+npm start -- --city "Москва" --days 3 --no-cache
+npm test
 ```
 
-Дополнительные npm-скрипты:
+`npm test` — демо-запуск с городами из скрипта.
+
+### Проверка кода
 
 ```bash
-npm test              # демо-запуск с примером городов
-npm run lint:check    # проверка ESLint
-npm run lint:fix      # автоисправление ESLint
-npm run format:check  # проверка Prettier
-npm run format:fix    # форматирование Prettier
-npm run check         # lint + format (проверка)
-npm run fix           # lint + format (исправление)
+npm run lint:check      # ESLint
+npm run lint:fix        # ESLint, автоисправление
+npm run format:check    # Prettier, проверка
+npm run format:fix      # Prettier, форматирование
+npm run check           # lint + format (проверка)
+npm run fix             # lint + format (исправление)
 ```
 
 ## 6. Пример вывода в консоль
@@ -85,6 +94,8 @@ reports/{город}-{ГГГГ-ММ-ДД}.json
 ```
 
 ## 7. Обрабатываемые ошибки и коды завершения
+
+Сообщения выводятся без стека (для городов — префикс `Error:`, красным цветом).
 
 ### Аргументы CLI
 
@@ -144,7 +155,20 @@ src/
   services/getWeather.js   # бизнес-логика, параллельность, кэш
   storage/                 # чтение/запись отчётов
   format/printWeather.js   # вывод в консоль
-docs/postman/              # коллекция Postman (запросы геокодинга и прогноза, переменные, примеры успешных и ошибочных ответов) 
+docs/postman/              # коллекция Postman
 reports/                   # сгенерированные отчёты (в .gitignore)
+Dockerfile                 # образ для запуска в контейнере
+```
+
+Коллекция Postman: `docs/postman/digest.postman_collection.json`
+
+## 9. Docker
+
+Нужен запущенный **Docker Desktop**.
+
+```bash
+npm run docker:build    # собрать образ
+npm run docker:test     # демо: Москва, 3 дня
+npm run docker:run -- --city "Москва" --days 3
 ```
 
