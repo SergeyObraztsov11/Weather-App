@@ -12,8 +12,10 @@ try {
     printWeather(citiesWeather);
 
     const hasErrors = citiesWeather.some((item) => item.status === "error");
-    process.exit(hasErrors ? 1 : 0);
+    // exitCode instead of process.exit — avoids Windows UV_HANDLE_CLOSING crash
+    process.exitCode = hasErrors ? 1 : 0;
 } catch (error) {
     console.error(`\x1b[31m${error.message}\x1b[0m`);
-    process.exit(1);
+    process.exitCode = 1;
 }
+
