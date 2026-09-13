@@ -4,7 +4,11 @@ import { printWeather } from "./format/printWeather.js";
 
 try {
     const options = parseArgs(process.argv);
-    const citiesWeather = await getWeather(options.cityNames, options.days, options.noCache);
+    const citiesWeather = await getWeather(
+        options.cityNames,
+        options.days,
+        options.noCache,
+    );
     printWeather(citiesWeather);
 } catch (error) {
     console.error(error.message);
