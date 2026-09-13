@@ -4,10 +4,14 @@ import { readReport } from "../storage/readReport.js";
 import { saveReport } from "../storage/saveReport.js";
 
 async function getWeatherForCity(cityName, days, noCache) {
+    // Если кеш не отключен, то проверяем, есть ли данные в кеше и подходят ли они по дням
     if (!noCache) {
         const cached = await readReport(cityName);
-        if (cached) {
-            return cached;
+        if (cached && cached.weather.length >= days) {
+            return {
+                ...cached,
+                weather: cached.weather.slice(0, days),
+            };
         }
     }
     const data = await getCityCoordinates(cityName);
