@@ -2,7 +2,7 @@ export function parseArgs(argv) {
     const args = argv.slice(2);
 
     const result = {
-        cities: [],
+        cityNames: [],
         days: 3,
         noCache: false,
     };
@@ -15,9 +15,9 @@ export function parseArgs(argv) {
             if (!value || value.startsWith("--")) {
                 throw new Error("Missing value for --city");
             }
-            result.cities = value
+            result.cityNames = value
                 .split(",")
-                .map((city) => city.trim())
+                .map((cityName) => cityName.trim())
                 .filter(Boolean);
             i += 1;
             continue;
@@ -49,7 +49,7 @@ export function parseArgs(argv) {
         }
     }
 
-    if (result.cities.length === 0) {
+    if (result.cityNames.length === 0) {
         throw new Error('Missing required argument: --city "Moscow, Kazan"');
     }
 

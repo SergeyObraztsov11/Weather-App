@@ -1,15 +1,15 @@
 import { getCityCoordinates } from "../api/getCityCoordinates.js";
 import { getWeatherByCoordinates } from "../api/getWeatherByCoordinates.js";
 
-async function getWeatherForCity(city, days) {
-    const data = await getCityCoordinates(city);
+async function getWeatherForCity(cityName, days) {
+    const data = await getCityCoordinates(cityName);
     const weather = await getWeatherByCoordinates(
         data.latitude,
         data.longitude,
         days,
     );
     return {
-        city: data.name,
+        cityName: data.name,
         country: data.country,
         latitude: data.latitude,
         longitude: data.longitude,
@@ -19,7 +19,7 @@ async function getWeatherForCity(city, days) {
 
 export async function getWeather(cityNames = [], days = 3) {
     const results = await Promise.allSettled(
-        cityNames.map((name) => getWeatherForCity(name, days)),
+        cityNames.map((cityName) => getWeatherForCity(cityName, days)),
     );
     return results.map((result, index) => {
         if (result.status === "fulfilled") {
@@ -28,7 +28,7 @@ export async function getWeather(cityNames = [], days = 3) {
 
         return {
             status: "error",
-            city: cityNames[index],
+            cityName: cityNames[index],
             errorMessage: result.reason.message,
         };
     });

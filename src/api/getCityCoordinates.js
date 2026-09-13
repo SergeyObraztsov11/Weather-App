@@ -1,16 +1,16 @@
 import { config } from "../config.js";
 
-function buildUrl(city) {
+function buildUrl(cityName) {
     const url = new URL("/v1/search", config.geocodingBaseUrl);
-    url.searchParams.set("name", city);
+    url.searchParams.set("name", cityName);
     url.searchParams.set("count", "1");
     url.searchParams.set("language", "ru");
     url.searchParams.set("format", "json");
     return url;
 }
 
-export async function getCityCoordinates(city) {
-    const url = buildUrl(city);
+export async function getCityCoordinates(cityName) {
+    const url = buildUrl(cityName);
 
     const controller = new AbortController();
     const timeout = setTimeout(() => {
@@ -23,7 +23,7 @@ export async function getCityCoordinates(city) {
         const result = data.results?.[0];
 
         if (!result) {
-            throw new Error(`City ${city} not found`);
+            throw new Error(`City ${cityName} not found`);
         }
 
         return {
@@ -34,7 +34,7 @@ export async function getCityCoordinates(city) {
         };
     } catch (error) {
         if (error.name === "AbortError") {
-            throw new Error(`Geocoding timeout for "${city}"`);
+            throw new Error(`Geocoding timeout for "${cityName}"`);
         }
         throw error;
     } finally {
