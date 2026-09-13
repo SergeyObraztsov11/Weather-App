@@ -1,7 +1,9 @@
+import fs from "fs/promises";
 import { getReportPathByCityName } from "./getReportPathByCityName.js";
 
 export async function readReport(cityName) {
     const reportPath = getReportPathByCityName(cityName);
+
     try {
         const report = await fs.readFile(reportPath, "utf8");
         return JSON.parse(report);

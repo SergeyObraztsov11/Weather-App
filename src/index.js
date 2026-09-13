@@ -3,7 +3,7 @@ import { getWeather } from "./services/getWeather.js";
 
 try {
     const options = parseArgs(process.argv);
-    const weather = await getWeather(options.cityNames, options.days);
+    const weather = await getWeather(options.cityNames, options.days, options.noCache);
     console.log(weather);
 } catch (error) {
     console.error(error.message);
