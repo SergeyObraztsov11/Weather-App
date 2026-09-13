@@ -1,4 +1,5 @@
 import { getReportPathByCityName } from "./getReportPathByCityName.js";
+import fs from "fs/promises";
 
 export async function readReport(cityName) {
     const reportPath = getReportPathByCityName(cityName);
