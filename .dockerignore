@@ -1,0 +1,10 @@
+node_modules
+reports
+.git
+.env
+docs
+*.md
+eslint.config.js
+.prettierrc
+.prettierignore
+package-lock.json
